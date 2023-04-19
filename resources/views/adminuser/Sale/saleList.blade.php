@@ -59,9 +59,63 @@
                 </tbody>
             </table>
             <div class="float-end">
-                <button class="btn btn-primary">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModalCenter">
                     Proceed
                 </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Shwe Pinle</h5>
+                        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                        <div class=" my-3">
+                            <div class="col-md-3 float-end me-3">
+                                <input type="text" class="form-control col-md-3 float-end" name="customerName" placeholder="Enter Customer Name">
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Unit</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Cost</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($saleProducts as $sale )
+                                        <tr class="table-active">
+                                            <td>{{$sale->id}}</td>
+                                            <td>{{$sale->name}}</td>
+                                            <td>{{$sale->qty}}</td>
+                                            <td>{{$sale->unit}}</td>
+                                            <td>{{$sale->price}}</td>
+                                            <td>{{$sale->total_cost}}</td>
+                                            <td>
+                                                <a href="" class="btn btn-danger">
+                                                    Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-primary">Print <i class="fa-solid fa-print"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Modal -->
@@ -123,23 +177,41 @@
                     success:function(response){
                         console.log(response);
                         $result = ``;
-                        for (let $i = 0; $i < response.length; $i++) {
-                            console.log(response[$i]);
-                            $result =
-                            `
-                                <td id="productId">${response[$i].id}</td>
-                                <td class="col-md-3" id="productName">${response[$i].name}</td>
-                                <td class="col-md-2" ><input type="text" name="qty" id="productQty" class="form-control"></td>
-                                <td class="col-md-2" ><input type="text" name="unit" id="productUnit" class="form-control"></td>
-                                <td class="col-md-2">
-                                    <select name="salePrice" id="salePrice" class="form-control">
-                                        <option value=""></option>
-                                        <option value="${response[$i].sale_price}">${response[$i].sale_price}</option>
-                                    </select>
-                                </td>
-                                <td><button class="btn btn-primary" id="get-Data"><i class="fa-solid fa-plus"></i></button></td>;
-                            `;
+                        for(let x in response){
+                            console.log(response[x].length);
+                            // $result =
+                            //         `
+                            //             <td id="productId">${response[x].id}</td>
+                            //             <td class="col-md-3" id="productName">${response[x].name}</td>
+                            //             <td class="col-md-2" ><input type="text" name="qty" id="productQty" class="form-control"></td>
+                            //             <td class="col-md-2" ><input type="text" name="unit" id="productUnit" class="form-control"></td>
+                            //             <td class="col-md-2">
+                            //                 <select name="salePrice" id="salePrice" class="form-control">
+                            //                     <option value=""></option>
+                            //                     <option value="${response[x].sale_price}">${response[x].sale_price}</option>
+                            //                 </select>
+                            //             </td>
+                            //             <td><button class="btn btn-primary" id="get-Data"><i class="fa-solid fa-plus"></i></button></td>;
+                            //         `;
+
                         }
+                        // for (let $i = 0; $i < response.length; $i++) {
+                        //     console.log(response[$i]);
+                        //     $result =
+                        //     `
+                        //         <td id="productId">${response[$i].id}</td>
+                        //         <td class="col-md-3" id="productName">${response[$i].name}</td>
+                        //         <td class="col-md-2" ><input type="text" name="qty" id="productQty" class="form-control"></td>
+                        //         <td class="col-md-2" ><input type="text" name="unit" id="productUnit" class="form-control"></td>
+                        //         <td class="col-md-2">
+                        //             <select name="salePrice" id="salePrice" class="form-control">
+                        //                 <option value=""></option>
+                        //                 <option value="${response[$i].sale_price}">${response[$i].sale_price}</option>
+                        //             </select>
+                        //         </td>
+                        //         <td><button class="btn btn-primary" id="get-Data"><i class="fa-solid fa-plus"></i></button></td>;
+                        //     `;
+                        // }
                         $('#table-data').html($result);
                     },
                     error : function(request, status, error) {
@@ -185,20 +257,21 @@
                             console.log(result[$i]);
                             $resultTable +=
                             `
-
-                            <tr class="table-active">
+                            @foreach ($saleProducts as $sale )
+                                                            <tr class="table-active">
                                 <td>${result[$i].id}</td>
-                                <td>${result[$i].name}</td>
-                                <td>${result[$i].qty}</td>
-                                <td>${result[$i].unit}</td>
-                                <td>${result[$i].price}</td>
-                                <td>${result[$i].total_cost }</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td>
                                     <a href="" class="btn btn-danger">
                                         Delete
                                     </a>
                                 </td>
                             </tr>
+                            @endforeach
                             `
                         }
                         $('#table-Add').html($resultTable);

@@ -98,8 +98,8 @@ rel="stylesheet"
         <!-- Brand -->
         <a class="navbar-brand" href="#">
           <img
-            src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-            height="25"
+            src="{{asset('img/logo.jpeg')}}"
+            height="70"
             alt="MDB Logo"
             loading="lazy"
           />

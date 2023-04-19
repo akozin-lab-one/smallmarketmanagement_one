@@ -16,29 +16,35 @@ class PriceController extends Controller
             ->leftjoin('shops', 'products.shop_id', 'shops.id')
             ->get()
             ->groupBy('name');
+        // dd($list->toArray());
         return view('adminuser.price.main', compact('list'));
     }
 
     //detailPage
     public function detailPage($id){
-        $product = Products::select('name', 'category_id', 'price', 'small_package')
+        $product = Products::select('name', 'category_id', 'price', 'small_package',)
                     ->where('id', $id)
                     ->first();
+        // dd($product->toArray());
 
         $priceList = Products::select('price','date','qty')
                     ->orderBy('id', 'desc')
                     ->where('name', $product->name )
                     ->paginate(4);
         // dd($priceList->toArray());
-        $smallPackageprice = Products::select('products.id','price', 'qty', 'categories.name as category_name')
+        $smallPackageprice = Products::select('products.id as productId','price', 'qty', 'categories.name as category_name')
                     ->leftjoin('categories', 'products.category_id', 'categories.id')
-                    ->where('category_id', $product->category_id)
+                    ->where('products.id', $id)
                     ->first();
+        // dd($smallPackageprice->toArray());
         $salePrice = SalePrice::select('sale_price', 'id')
-                            ->where('product_id', $id)->first();
+                            ->where('id', $id)->first();
+
 
         $BigPrice = $product->price/$smallPackageprice->qty;
+        // dd($BigPrice);
         $smallprice = $product->small_package  == null ? " " : $BigPrice/$product->small_package;
+        // dd($smallprice);
 
         $status = $smallPackageprice->category_name == 'coffee' || $smallPackageprice->category_name == 'ကော်ဖီ' || $smallPackageprice->category_name == 'tea' || $smallPackageprice->category_name == 'လက်ဖက်ရည်';
         if ($status){
@@ -51,7 +57,7 @@ class PriceController extends Controller
 
         };
         $result = $status == true ? $smallPrice : "";
-
+        // dd($result);
         return view('adminuser.price.detail', compact('product','priceList', 'BigPrice', 'result','smallprice' , 'smallPackageprice', 'salePrice'));
     }
 

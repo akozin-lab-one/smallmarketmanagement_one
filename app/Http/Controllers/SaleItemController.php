@@ -15,6 +15,6 @@ class SaleItemController extends Controller
         $saleProducts = SaleItem::get();
         // dd($saleProducts->toArray());
         // dd($Products->toArray());
-        return view('adminuser.Sale.saleList', compact('Products', 'saleProducts'));
+        return view('adminuser.Sale.saleList', compact('Products','saleProducts'));
     }
 }

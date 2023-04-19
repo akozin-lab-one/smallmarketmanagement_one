@@ -15,8 +15,9 @@ class AjaxController extends Controller
         $products = Products::select('products.id', 'products.name', 'sale_prices.sale_price')
                 ->leftjoin('sale_prices', 'products.id', 'sale_prices.product_id')
                 ->where('name', 'like', '%'.$request->searchValue.'%')
-                ->get();
-
+                ->get()
+                ->groupBy('name');
+        logger($products);
         return $products;
     }
 
@@ -42,7 +43,7 @@ class AjaxController extends Controller
         SaleItem::create($saleData);
 
         $getData = SaleItem::orderBy('id', 'desc')->get();
-        logger($getData);
+        // logger($getData);
         return $getData;
     }
 

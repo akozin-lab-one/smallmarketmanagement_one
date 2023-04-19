@@ -58,7 +58,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                    {{$list}}
                     @foreach ($list as $li )
+                    {{$li}}
                         <tr class="table-active">
                             <td>
                                 @php

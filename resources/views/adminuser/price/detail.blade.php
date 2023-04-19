@@ -103,12 +103,18 @@
                                             တစ်တွဲ(ဆယ်ထုပ်)
                                         </td>
                                         <td>
+                                            {{round($result) * 10 }} <span>Kyats</span>
+                                        </td>
+                                        <td>
                                             {{round($result) * 10 - 100}} <span>Kyats</span>
                                         </td>
                                     </tr>
                                     <tr class="table-active">
                                         <td>
                                             နှစ်တွဲနှင့်အထက်
+                                        </td>
+                                        <td>
+                                            {{round($result)*10 }} <span>Kyats</span>
                                         </td>
                                         <td>
                                             {{round($result)*10 -300 }} <span>Kyats</span>
