@@ -140,6 +140,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     //add list
                     Route::get('/add', [AjaxController::class, 'AddDataList'])->name('ajax#add');
 
+                    //add saleList and delete sale item
+                    Route::get('/addsalelist', [AjaxController::class, 'AddSaleList'])->name('ajax#saleList');
+
                     // //add tabel
                     // Route::get('addTable', [AjaxController::class, 'AddTableList'])->name('ajax#addtable');
                 });

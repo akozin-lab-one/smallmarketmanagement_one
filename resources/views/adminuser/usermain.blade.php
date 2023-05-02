@@ -5,14 +5,27 @@
 @section('myContent')
 
     <div class="container">
-        <div class="col-md-8 offset-md-2 d-flex justify-content-evenly">
-            <div class="col-md-4">
+        <div class="col-md-10 offset-md-1 d-flex justify-content-evenly">
+            <div class="col-md-5">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4>Daily</h4>
-                                <h5>76500 Kyats</h5>
+                                <h1>
+                                @if ($dailyInc != null)
+                                    @php
+                                        $result = 0;
+                                        for ($i=0; $i < count($dailyInc) ; $i++) {
+                                            $result += $dailyInc[$i]->total;
+                                        }
+                                    @endphp
+                                        {{$result}}
+                                @else
+                                        0
+                                @endif
+                                    <span><h5 class="d-inline">Kyats</h5></span>
+                                </h1>
+                                <h4><span>Daily</span></h4>
                             </div>
                             <div>
                                 <i class="fa-solid fa-calendar-day fs-3"></i>
@@ -21,13 +34,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
+                                <h1>
+                                    @php
+                                        $result = 0;
+
+                                        for ($i=0; $i < count($monthlyInc) ; $i++) { 
+                                            $result += $monthlyInc[$i]->total_cost;
+                                        }
+                                    @endphp
+                                        {{$result}}
+                                    <span><h5 class="d-inline">Kyats</h5></span>
+                                </h1>
                                 <h4>Monthly</h4>
-                                <h5>1925000 Kyats</h5>
                             </div>
                             <div>
                                 <i class="fa-solid fa-calendar-days fs-3"></i>
@@ -44,17 +67,32 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h4>Profilt</h4>
-                                    <h5>
-                                        {{-- @php
-                                            $total = 0;
+                                    <h3 class="fw-bold ms-auto">
+
+                                        @php
+                                            $origin = 0;
                                         @endphp
 
-                                        @foreach ($total_cost as $cost )
-                                            $total += $cost->total_price;
+                                        @foreach ($originalPrice as $op )
+
+                                            @php
+                                             $origin += $op->total;
+                                            @endphp
                                         @endforeach
-                                        {{$total}} Kyats --}}
-                                    </h5>
+
+                                        @php
+                                            $sale = 0;
+                                        @endphp
+
+                                        @foreach ($salePrice as $sa )
+                                            @php
+                                                $sale += $sa->total;
+                                            @endphp
+                                        @endforeach
+
+                                        {{$sale - $origin}} <span class="ms-1 fs-5">Kyats</span>
+                                    </h3>
+                                    <h4>Profilt</h4>
                                 </div>
                                 <div>
                                     <i class="fa-solid fa-wallet fs-3"></i>
@@ -105,11 +143,17 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr class="table-active">
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                              </tr>
+                                {{-- @foreach ($daily as $d )
+                                <tr class="table-active">
+                                    <td>
+                                        @for ($i=0; $i<count($d); $i++)
+                                            {{$d[$i]->created_at->format('d-m-y')}}
+                                        @endfor
+                                    </td>
+                                    <td>Column content</td>
+                                    <td>Column content</td>
+                                  </tr>
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
@@ -124,7 +168,7 @@
                               <tr>
                                 <th scope="col">Month</th>
                                 <th scope="col">Most Sale Item</th>
-                                <th scope="col">Sale Price</th>
+                                <th scope="col">Total</th>
                               </tr>
                             </thead>
                             <tbody>

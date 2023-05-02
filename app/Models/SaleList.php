@@ -9,5 +9,5 @@ class SaleList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'qty', 'unit', 'price', 'total_cost'];
+    protected $fillable = ['user_id','name', 'qty', 'unit', 'price', 'total_cost'];
 }

@@ -99,7 +99,8 @@ rel="stylesheet"
         <a class="navbar-brand" href="#">
           <img
             src="{{asset('img/logo.jpeg')}}"
-            height="70"
+            style="width:100px;"
+            height="50"
             alt="MDB Logo"
             loading="lazy"
           />
@@ -132,7 +133,7 @@ rel="stylesheet"
               <img
                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
                 class="rounded-circle"
-                height="22"
+                height="45"
                 alt="Avatar"
                 loading="lazy"
               />

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Shop;
 use App\Models\Category;
 use App\Models\Products;
+use App\Models\SaleList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +18,26 @@ class ProductsController extends Controller
         $total = Products::select(DB::raw('SUM(price) as total_price'))
                 ->groupBy('category_id')
                 ->get();
-        return view('adminuser.usermain', compact('total'));
+
+        $dailyInc = SaleList::select('created_at',DB::raw('SUM(total_cost) as total'))
+                    ->whereDate('created_at', Carbon::today()->toDateString())
+                    ->groupBy('created_at')
+                    ->get();
+
+        $monthlyInc = SaleList::select('total_cost')
+                    ->whereMonth('created_at', Carbon::now()->month)
+                    ->get();
+
+        $originalPrice = Products::select('name', DB::raw('SUM(price) as total'))
+                                    ->groupBy('name')
+                                    ->get();
+
+        $salePrice = SaleList::select('name', DB::raw('SUM(total_cost) as total'))
+                                    ->groupBy('name')
+                                    ->get();
+
+
+        return view('adminuser.usermain', compact('total', 'dailyInc', 'monthlyInc', 'originalPrice', 'salePrice'));
     }
 
 
@@ -74,7 +95,7 @@ class ProductsController extends Controller
     //delete
     public function deleteData($id){
         Products::where('id', $id)->delete();
-        return back()->with(['deleteProductSuccess'=>'သင့်ပစည်းကို အရောင်းစာရင်းမှ ပယ်ဖျက်ြခင်း အောင်မြင်ပါသည်။']);
+        return back()->with(['deleteProductSuccess'=>'သင့်ပစည်းကို အရောင်းစာရင်းမှ ပယ်ဖျက်ခြင်း အောင်မြင်ပါသည်။']);
     }
 
     //validate data

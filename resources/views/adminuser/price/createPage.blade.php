@@ -24,7 +24,15 @@
                             <select class="form-control @error('productId') is-invalid @enderror" name="productId" id="">
                                 <option value=""></option>
                                 @foreach ($products as $p )
-                                    <option value="{{$p->id}}">{{$p->name}}</option>
+                                        @php
+                                            for ($i=0; $i < count($p) ; $i++) {
+                                                # code...
+                                                $result = $p[$i];
+                                            }
+                                        @endphp
+                                    <option value="{{$result->id}}">
+                                        {{$result->name}}
+                                    </option>
                                 @endforeach
                             </select>
                             @error('productId')

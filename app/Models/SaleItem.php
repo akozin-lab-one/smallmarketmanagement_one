@@ -9,5 +9,5 @@ class SaleItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'qty', 'unit', 'total_cost'];
+    protected $fillable = ['user_id','name', 'price', 'qty', 'unit', 'total_cost'];
 }

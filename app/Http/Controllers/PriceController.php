@@ -63,8 +63,8 @@ class PriceController extends Controller
 
     //createPage
     public function createPage(){
-        $products = Products::select('id','name')->get();
-        // dd($product_name->toArray());
+        $products = Products::select('id','name')->get()->groupBy('name');
+        // dd($products->toArray());
         return view('adminuser.price.createPage', compact('products'));
     }
 
