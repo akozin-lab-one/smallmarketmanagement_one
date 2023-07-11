@@ -38,8 +38,8 @@ class PriceController extends Controller
                     ->first();
         // dd($smallPackageprice->toArray());
         $salePrice = SalePrice::select('sale_price', 'id')
-                            ->where('id', $id)->first();
-
+                            ->where('product_id', $id)->first();
+        // dd($salePrice->toArray());
 
         $BigPrice = $product->price/$smallPackageprice->qty;
         // dd($BigPrice);

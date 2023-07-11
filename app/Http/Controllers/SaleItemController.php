@@ -21,7 +21,7 @@ class SaleItemController extends Controller
                     ->whereDate('created_at', Carbon::today()->toDateString())
                     ->groupBy('name')
                     ->get();
-
+        // dd($itemList->toArray());
         return view('adminuser.Sale.saleList', compact('Products','saleProducts', 'itemList'));
     }
 }

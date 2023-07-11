@@ -145,6 +145,19 @@
                                     </tr>
                                     @endif
                                 @elseif ($product->small_package  != null)
+                                @if ($smallPackageprice->category_name == 'Drink' || $smallPackageprice->category_name == 'drink' ||$smallPackageprice->category_name == 'အအေး')
+                                <tr class="table-active">
+                                    <td>
+                                        တစ်ဗူး
+                                    </td>
+                                    <td>
+                                        {{round($smallprice)}} <span>Kyats</span>
+                                    </td>
+                                    <td>
+                                        {{round($smallprice) + 300}} <span>Kyats</span>
+                                    </td>
+                                </tr>
+                                @else
                                 <tr class="table-active">
                                     <td>
                                         အထုပ်သေး(တစ်ထုပ်)
@@ -156,6 +169,7 @@
                                         {{round($smallprice) + 50}} <span>Kyats</span>
                                     </td>
                                 </tr>
+                                @endif
                                 @endif
                             </tbody>
                         </table>

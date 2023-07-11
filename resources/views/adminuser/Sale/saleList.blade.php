@@ -4,13 +4,15 @@
 
 @section('myContent')
     <div class="row">
-        <div class="col-md-10 offset-md-1 d-flex justify-content-evenly">
+        <div class="col-md-10 offset-md-1 d-flex justify-content-evenly" id="dailyList">
             <div class="col-md-5">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h2 class="text-center">{{count($itemList)}}</h2>
+                                <h2 class="text-center" id="itemList">
+                                    {{count($itemList)}}
+                                </h2>
                                 <h4>Item List</h4>
                             </div>
                             <div>
@@ -25,18 +27,20 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h2>
-                                    @php
+                                <div class="d-flex">
+                                    <h2 id="dailyTotal">
+                                        @php
 
-                                        $result = 0;
-                                        for ($i=0; $i < count($itemList) ; $i++) {
-                                            # code...
-                                            $result += $itemList[$i]->total;
-                                        }
-                                    @endphp
-                                    {{$result}}
-                                    <span><h5 class="d-inline">Kyats</h5></span>
-                                </h2>
+                                            $result = 0;
+                                            for ($i=0; $i < count($itemList) ; $i++) {
+                                                # code...
+                                                $result += $itemList[$i]->total;
+                                            }
+                                        @endphp
+                                        {{$result}}
+                                    </h2>
+                                    <h5 class="m-2"><span>Kyats</span></h5>
+                                </div>
                                 <h4><span>Income</span></h4>
                             </div>
                             <div>
@@ -158,7 +162,7 @@
 
 @section('Ajaxpart')
     <script>
-        $(document).ready(function(){
+        $(document).ready(function(e){
             $('.searchValue').on('keyup',function(){
                 $value=$(this).val();
                 console.log($value);
@@ -193,7 +197,9 @@
                                         <td class="col-md-2">
                                             <select name="salePrice" id="salePrice" class="form-control">
                                                 <option value=""></option>
-                                                <option value="${response[x][$i].sale_price}">${response[x][$i].sale_price}</option>
+                                                <option value="${response[x][$i].sale_price}">
+                                                    ${response[x][$i].sale_price}
+                                                    </option>
                                             </select>
                                         </td>
                                         <td><button class="btn btn-primary" id="get-Data"><i class="fa-solid fa-plus"></i></button></td>;
@@ -314,12 +320,36 @@
                         $('#table-print').html($printTable);
                     }
                 })
+
+                $.ajax({
+                    type: 'get',
+                    url:'ajax/addDaily',
+                    success:function(res){
+
+                    }
+                })
             })
 
             $('#printClose').click(function(){
                 $printTable =  ``;
                 $('#table-print').html($printTable);
             })
+
+
+            $data = {
+                    'itemList' : $('#itemList').text(),
+                    'dailyTotal' : $('#dailyTotal').text(),
+            };
+            console.log($data);
+
+            $.ajax({
+                    type: 'get',
+                    url:'ajax/addSale',
+                    data:$data,
+                    success:function(response){
+
+                    }
+                })
         })
     </script>
 @endsection

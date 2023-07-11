@@ -43,8 +43,8 @@
                                     @php
                                         $result = 0;
 
-                                        for ($i=0; $i < count($monthlyInc) ; $i++) { 
-                                            $result += $monthlyInc[$i]->total_cost;
+                                        for ($i=0; $i < count($monthlyInc) ; $i++) {
+                                            $result += $monthlyInc[$i]->total;
                                         }
                                     @endphp
                                         {{$result}}
@@ -90,7 +90,13 @@
                                             @endphp
                                         @endforeach
 
-                                        {{$sale - $origin}} <span class="ms-1 fs-5">Kyats</span>
+                                        @php
+                                            $profit = $sale - $origin;
+
+                                            $result = $profit < 0 ? 0 : $profit;
+                                        @endphp
+
+                                        {{$result}} <span class="ms-1 fs-5">Kyats</span>
                                     </h3>
                                     <h4>Profilt</h4>
                                 </div>
@@ -143,17 +149,22 @@
                               </tr>
                             </thead>
                             <tbody>
-                                {{-- @foreach ($daily as $d )
+                                @foreach ($daily as $d )
                                 <tr class="table-active">
                                     <td>
-                                        @for ($i=0; $i<count($d); $i++)
-                                            {{$d[$i]->created_at->format('d-m-y')}}
-                                        @endfor
+                                        @php
+                                            $date = date('d-m-y',strtotime($d->date))
+                                        @endphp
+                                        {{$date}}
                                     </td>
-                                    <td>Column content</td>
-                                    <td>Column content</td>
+                                    <td>
+                                        {{$d->item}}
+                                    </td>
+                                    <td>
+                                        {{$d->total}} Kyats
+                                    </td>
                                   </tr>
-                                @endforeach --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -172,11 +183,19 @@
                               </tr>
                             </thead>
                             <tbody>
-                              <tr class="table-active">
-                                <td>Column content</td>
-                                <td>Column content</td>
-                                <td>Column content</td>
-                              </tr>
+                                @foreach ($monthInc as $m )
+                                    <tr class="table-active">
+                                        <td>
+                                            {{$m->month}}
+                                        </td>
+                                        <td>
+                                            {{$m->most}}
+                                        </td>
+                                        <td>
+                                            {{$m->month_total}} Kyats
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

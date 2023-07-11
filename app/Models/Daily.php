@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Products extends Model
+class Daily extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'category_id', 'qty','unit','small_package',  'price', 'shop_id', 'Date'];
-
+    protected $fillable = ['date', 'item_list', 'daily_total'];
 }

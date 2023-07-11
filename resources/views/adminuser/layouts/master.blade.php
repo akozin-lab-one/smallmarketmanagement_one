@@ -53,6 +53,13 @@ rel="stylesheet"
         <i class="fas fa-clipboard-list fa-fw me-3"></i><span>Cargo List</span>
       </a>
       <a
+      href="{{route('remain#main')}}"
+      class="list-group-item list-group-item-action py-2 ripple"
+      aria-current="true"
+    >
+    <i class="fa-regular fa-bell me-3"></i><span>Remain Cargos</span>
+    </a>
+      <a
       href="{{route('price#mainpage')}}"
       class="list-group-item list-group-item-action py-2 ripple"
       aria-current="true"
@@ -130,23 +137,21 @@ rel="stylesheet"
               data-mdb-toggle="dropdown"
               aria-expanded="false"
             >
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
-                class="rounded-circle"
-                height="45"
-                alt="Avatar"
-                loading="lazy"
-              />
-            </a>
+            @if (Auth::user()->image == null)
+            <img src="{{asset('img/blank-profile.webp')}}" class="img-thumbnail rounded-circle" alt="" height="50" width="50">
+            @else
+            <img src="{{asset('storage/' . Auth::user()->image)}}" class="img-thumbnail rounded-circle" alt="" height="50" width="50">
+            @endif
+
             <ul
               class="dropdown-menu dropdown-menu-end"
               aria-labelledby="navbarDropdownMenuLink"
             >
               <li>
-                <a class="dropdown-item" href="#">My profile</a>
+                <a class="dropdown-item" href="{{route('account#main' , Auth::user()->id)}}">My profile</a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="{{route('setting#account', Auth::user()->id)}}">Settings</a>
               </li>
               <li class="m-3">
                     <form action="{{route('logout')}}" method="post">

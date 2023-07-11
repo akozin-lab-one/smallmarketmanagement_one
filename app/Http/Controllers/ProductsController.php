@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Shop;
+use App\Models\Daily;
+use App\Models\monthly;
 use App\Models\Category;
 use App\Models\Products;
 use App\Models\SaleList;
 use Illuminate\Http\Request;
+use App\Models\SaleProductlist;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,11 +26,16 @@ class ProductsController extends Controller
                     ->whereDate('created_at', Carbon::today()->toDateString())
                     ->groupBy('created_at')
                     ->get();
+        // dd($dailyInc->toArray());
+        $monthlyInc = SaleList::select('name', DB::raw('count(name) as count_name'), DB::raw('SUM(total_cost) as total'))
+                        ->whereMonth('created_at', Carbon::now()->month)
+                        ->groupBy('name')
+                        ->get();
 
-        $monthlyInc = SaleList::select('total_cost')
-                    ->whereMonth('created_at', Carbon::now()->month)
-                    ->get();
-
+        $monthInc = monthly::select('month', DB::raw('MAX(most_sale_item) as most'), DB::raw('MAX(total) as month_total'))
+                            ->groupBy('month')
+                            ->get();
+        // dd($monthInc->toArray());
         $originalPrice = Products::select('name', DB::raw('SUM(price) as total'))
                                     ->groupBy('name')
                                     ->get();
@@ -36,8 +44,11 @@ class ProductsController extends Controller
                                     ->groupBy('name')
                                     ->get();
 
+        $daily = Daily::select('date',DB::raw('MAX(daily_total) as total'), DB::raw('MAX(item_list) as item'))
+                            ->groupBy('date')
+                            ->get();
 
-        return view('adminuser.usermain', compact('total', 'dailyInc', 'monthlyInc', 'originalPrice', 'salePrice'));
+        return view('adminuser.usermain', compact('total', 'dailyInc', 'monthlyInc', 'originalPrice', 'salePrice', 'daily', 'monthInc'));
     }
 
 
@@ -72,6 +83,7 @@ class ProductsController extends Controller
 
         // dd($data);
         Products::create($data);
+        SaleProductlist::create($data);
         return back()->with(['createProductsuccess' => 'သင့်ဆိုင်အတွက် ရောင်းကုန်ပစည်းတစ်ခု စာရင်းသွင်းပြီးပါပြီ။ အသေးစိတ်ကြည့်ရှု့ရန် မူလစာမျက်နှာသို့သွားပေးပါ။']);
     }
 
@@ -121,7 +133,7 @@ class ProductsController extends Controller
             'small_package' => $request->smallPackage,
             'price' => $request->price,
             'shop_id' =>$request->shopId,
-            'date' => $request->date
+            'Date' => $request->date
         ];
     }
 }

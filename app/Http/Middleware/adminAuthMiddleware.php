@@ -17,8 +17,18 @@ class adminAuthMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role == 'superuser') {
-            return back();
+
+        if (!empty(Auth::user())) {
+            // dd(true);
+            if (url()->current() == route('Auth#login') || url()->current() == route('Auth#register')) {
+                return back();
+            }
+
+            if (Auth::user()->role == 'superuser') {
+                return back();
+            }
+            return $next($request);
+
         }
         return $next($request);
     }

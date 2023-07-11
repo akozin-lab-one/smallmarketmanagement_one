@@ -6,27 +6,22 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\SuperController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SaleItemController;
+use App\Http\Controllers\RemainItemController;
+use App\Http\Controllers\ResetpasswordController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-Route::redirect('', 'loginpage');
+Route::middleware(['adminAuth'])->group(function(){
+    Route::redirect('', 'loginpage');
 
-Route::get('/loginpage', [AuthController::class, 'loginPage'])->name('Auth#login');
+    Route::get('/loginpage', [AuthController::class, 'loginPage'])->name('Auth#login');
 
-Route::get('/registerpage', [AuthController::class, 'registerPage'])->name('Auth#register');
+    Route::get('/registerpage', [AuthController::class, 'registerPage'])->name('Auth#register');
+});
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [Authcontroller::class, 'dashboard'])->name('dashboard');
 
     //superuser
@@ -111,6 +106,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
                 });
 
+                //remaining cargo
+                Route::group(['prefix'=>'remain'], function(){
+                    Route::get('main', [RemainItemController::class, 'RemainListPage'])->name('remain#main');
+                });
+
                 //price
                 Route::group(['prefix'=> 'price'], function(){
 
@@ -132,6 +132,36 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::get('/', [SaleItemController::class, 'ListPage'])->name('adminuser#list');
                 });
 
+                //account
+                Route::group(['prefix'=>'account'], function(){
+                    //main account
+                    Route::get('/{id}', [AccountController::class, 'accountMainPage'])->name('account#main');
+
+                    //edit account
+                    Route::get('/edit/{id}', [AccountController::class, 'accountEditPage'])->name('account#editPage');
+
+                    //edit
+                    Route::post('/editdata', [AccountController::class, 'EditData'])->name('edit#account');
+
+                    //setting
+                    Route::get('/setting/{id}', [AccountController::class, 'SettingPage'])->name('setting#account');
+
+                    //password change
+                    Route::post('change/password', [AccountController::class, 'ChangePassword'])->name('change#password');
+
+                    //reset password
+                    Route::get('forget-password/{id}', [ResetpasswordController::class, 'ForgetPasswordPage'])->name('password.request');
+
+                    //password reset
+                    Route::post('forget-password/', [ResetpasswordController::class, 'PasswordForget'])->name('password.email');
+
+                    // // passwrod_get
+                    Route::get('reset-password/{token}', [ResetPasswordController::class, 'resetPasswordGetPage'])->name('reset.password.get');
+
+                    //submit reset password form
+                    Route::post('reset-password', [ResetPasswordController::class, 'submitPasswordForm'])->name('reset.password.post');
+                });
+
                 //ajax
                 Route::group(['prefix'=>'ajax'], function(){
                     //list
@@ -143,9 +173,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     //add saleList and delete sale item
                     Route::get('/addsalelist', [AjaxController::class, 'AddSaleList'])->name('ajax#saleList');
 
+                    //add sale
+                    Route::get('/addSale', [AjaxController::class, 'AddDailySale'])->name('ajax#daily');
+
+                    //add daily
+                    Route::get('/addDaily', [AjaxController::class, 'AddDaily'])->name('ajax#dailyadd');
+
                     // //add tabel
                     // Route::get('addTable', [AjaxController::class, 'AddTableList'])->name('ajax#addtable');
                 });
+
         });
     });
 });
