@@ -20,12 +20,21 @@
                     <tr>
                         <td>
                           <div class="d-flex align-items-center">
+                            @if ($p->image == null)
                             <img
-                                src="https://mdbootstrap.com/img/new/avatars/8.jpg"
-                                alt=""
-                                style="width: 45px; height: 45px"
-                                class="rounded-circle"
-                                />
+                            src="{{asset('img/blank-profile.webp')}}"
+                            alt=""
+                            style="width: 45px; height: 45px"
+                            class="rounded-circle"
+                            />
+                            @else
+                            <img
+                            src="{{asset('storage/' . $p->image)}}"
+                            alt=""
+                            style="width: 45px; height: 45px"
+                            class="rounded-circle"
+                            />
+                            @endif
                             <div class="ms-3">
                               <p class="fw-bold mb-1">{{$p->name}}</p>
                               <p class="text-muted mb-0">{{$p->email}}</p>
@@ -33,7 +42,7 @@
                           </div>
                         </td>
                         <td>
-                          <p class="fw-normal mb-1">Software engineer</p>
+                          <p class="fw-normal mb-1">Shop Owner</p>
                           <p class="text-muted mb-0">IT department</p>
                         </td>
                         <td>
@@ -41,9 +50,11 @@
                         </td>
                         <td>{{$p->address}}</td>
                         <td>
-                          <button type="button" class="btn btn-link btn-sm btn-rounded">
-                            Edit
-                          </button>
+                            <select name="" id="" class="form-control">
+                                <option value="">set action</option>
+                                <option value="1">lock</option>
+                                <option value="0">unlock</option>
+                            </select>
                         </td>
                       </tr>
                     @endforeach

@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class SuperController extends Controller
 {
     //mainPage
     public function dashboardPage(){
-        $person = User::where('role', 'admin')->get();
-        return view('superuser.dashboard', compact('person'));
+        $persons = User::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+        ->groupBy('date')
+        ->get();
+        // dd($person->toArray());
+        return view('superuser.dashboard', compact('persons'));
     }
 
     //detailPage

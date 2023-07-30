@@ -63,9 +63,7 @@ rel="stylesheet"
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('Super#team')}}">Team</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Projects</a>
-                    </li>
+
                 </ul>
                 <!-- Left links -->
             </div>
