@@ -21,7 +21,7 @@
                     </tr>
                 @endforeach
                     @else
-                        <h3 class="text-secondary mt-5 text-center">There is no Admin user Lists here</h3>
+                        <td class="text-secondary mt-5 text-center">There is no Admin user Lists here</td>
                     @endif
                 </tbody>
             </table>

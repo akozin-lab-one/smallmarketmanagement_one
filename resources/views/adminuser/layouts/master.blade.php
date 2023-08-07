@@ -40,28 +40,36 @@ rel="stylesheet"
           </a>
           <a
           href="{{route('adminuser#list')}}"
-          class="list-group-item list-group-item-action py-2 ripple"
+          class="list-group-item list-group-item-action py-2 ripple @if (Auth::user()->user_action === 1)
+          disabled
+          @endif"
           aria-current="true"
         >
           <i class="fas fa-cash-register fa-fw me-3"></i><span>Sale List</span>
         </a>
         <a
         href="{{route('product#mainpage')}}"
-        class="list-group-item list-group-item-action py-2 ripple"
+        class="list-group-item list-group-item-action py-2 ripple @if (Auth::user()->user_action === 1)
+        disabled
+        @endif"
         aria-current="true"
       >
         <i class="fas fa-clipboard-list fa-fw me-3"></i><span>Cargo List</span>
       </a>
       <a
       href="{{route('remain#main')}}"
-      class="list-group-item list-group-item-action py-2 ripple"
+      class="list-group-item list-group-item-action py-2 ripple @if (Auth::user()->user_action === 1)
+      disabled
+      @endif"
       aria-current="true"
     >
     <i class="fa-regular fa-bell me-3"></i><span>Remain Cargos</span>
     </a>
       <a
       href="{{route('price#mainpage')}}"
-      class="list-group-item list-group-item-action py-2 ripple"
+      class="list-group-item list-group-item-action py-2 ripple @if (Auth::user()->user_action === 1)
+      disabled
+      @endif"
       aria-current="true"
     >
       <i class="fas fa-money-bill-wave fa-fw me-3"></i><span>price</span>

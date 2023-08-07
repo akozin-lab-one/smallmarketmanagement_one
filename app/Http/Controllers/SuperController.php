@@ -12,9 +12,10 @@ class SuperController extends Controller
     //mainPage
     public function dashboardPage(){
         $persons = User::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+        ->where('role', 'admin')
         ->groupBy('date')
         ->get();
-        // dd($person->toArray());
+        // dd($persons->toArray());
         return view('superuser.dashboard', compact('persons'));
     }
 
@@ -39,6 +40,8 @@ class SuperController extends Controller
 
     //teamPage
     public function teamPage(){
+        // $userStatus = User::select('user_action')->where( 'id', 2)->get();
+        // dd($userStatus->toArray());
         $personList = User::where('role', 'admin')->get();
         // dd($personList->toArray());
         return view('superuser.team', compact('personList'));

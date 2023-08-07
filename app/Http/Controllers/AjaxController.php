@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Daily;
 use App\Models\monthly;
 use App\Models\Products;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class AjaxController extends Controller
 {
     //list Page
-    function listSearchPage(Request $request){
+    public function listSearchPage(Request $request){
         $data = "";
 
         $products = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_prices.sale_price')
@@ -29,7 +30,7 @@ class AjaxController extends Controller
     }
 
     //add Page
-    function AddDataList(Request $request){
+    public function AddDataList(Request $request){
         // logger($request);
         // $productId = $request->productId;
         $userId = $request->userId;
@@ -58,7 +59,7 @@ class AjaxController extends Controller
     }
 
     //add sale List
-    function AddSaleList(Request $request){
+    public function AddSaleList(Request $request){
         // logger($request->all());
 
         foreach ($request->all() as $item) {
@@ -135,9 +136,21 @@ class AjaxController extends Controller
             'total' => $totalCost
         ]);
     }
+
     //addTable List
     // function addTableList(){
     //     $saleProduct = SaleItem::get();
     //     dd($saleProduct);
     // }
+
+    //getuserstatus
+    public function getUserStatus(Request $request){
+        logger($request->all());
+        $updateData = [
+            'user_action' => $request->userStatus
+        ];
+        $userStatus = User::where( 'id', $request->userId)->update($updateData);
+
+        logger($userStatus);
+    }
 }

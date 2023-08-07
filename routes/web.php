@@ -38,6 +38,11 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::get('/team', [SuperController::class, 'teamPage'])->name('Super#team');
             });
+
+            Route::group(['prefix'=>'ajax'], function(){
+                //getuesrStatus
+                Route::get('/userStatus', [AjaxController::class, 'getUserStatus'])->name('user#Status');
+            });
         });
     });
 
@@ -178,6 +183,9 @@ Route::middleware(['auth'])->group(function () {
 
                     //add daily
                     Route::get('/addDaily', [AjaxController::class, 'AddDaily'])->name('ajax#dailyadd');
+
+                    //usercontrol
+                    // Route::get('/userStatus', [AjaxController::class, 'getUserStatus'])->name('ajax#userstatus');
 
                     // //add tabel
                     // Route::get('addTable', [AjaxController::class, 'AddTableList'])->name('ajax#addtable');
