@@ -12,16 +12,18 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h2>
-                                    @php
-                                        $total = 0;
-                                    @endphp
-
-                                    @foreach ($total_cost as $cost )
+                                        @if(count($total_cost))
+                                        0 Kyats
+                                    @else
                                         @php
-                                            $total += $cost->total_price;
+                                            $total = 0;
+                                            foreach ($total_cost as $cost) {
+                                                $total += $cost->total_price;
+                                            }
                                         @endphp
-                                    @endforeach
-                                    {{$total}} Kyats
+                                        {{$total}} Kyats
+                                    @endif
+
                                     </h2>
                                     <h4>Total Cost</h4>
                                 </div>
@@ -37,7 +39,14 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h2>{{count($shopList)}}</h2>
+                                    <h2>
+                                        @if ($shopList && (is_array($shopList) || $shopList instanceof Countable))
+                                        {{ count($shopList) }}
+                                    @else
+                                        0
+                                    @endif
+
+                                    </h2>
                                     <h4>Total Shops</h4>
                                 </div>
                                 <div>
@@ -65,7 +74,7 @@
                     <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
-            @if (count($shopList) != 0)
+            @if ($shopList && (is_array($shopList) || $shopList instanceof Countable))
             <h3 class="fw-bold">Shop</h3>
             <table class="table table-hover">
                 <thead>

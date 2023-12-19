@@ -69,6 +69,7 @@ class PriceController extends Controller
 
     //createdata
     public function createData(Request $request){
+        // dd($request->all());
         $this->validateRequestData($request);
         $data = $this->requestData($request);
 
@@ -79,6 +80,7 @@ class PriceController extends Controller
     //validate
     private function validateRequestData($request){
         $validateRule = [
+            'userId' => 'required',
             'productId' =>'required',
             'salePrice' => 'required'
         ];
@@ -88,6 +90,7 @@ class PriceController extends Controller
     //request data
     private function requestData($request){
         return [
+            'user_id' => $request->userId,
             'product_id' => $request->productId,
             'sale_price' => $request->salePrice
         ];

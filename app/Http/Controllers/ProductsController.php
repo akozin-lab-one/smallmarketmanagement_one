@@ -22,7 +22,7 @@ class ProductsController extends Controller
         $total = Products::select(DB::raw('SUM(price) as total_price'))
                 ->groupBy('category_id')
                 ->get();
-
+        // dd($total->toArray());
         $dailyInc = SaleList::select('created_at',DB::raw('SUM(total_cost) as total'))
                     ->whereDate('created_at', Carbon::today()->toDateString())
                     ->groupBy('created_at')
@@ -115,6 +115,7 @@ class ProductsController extends Controller
             // Update the existing record with the new quantity
             $lastAddedProduct->update(['qty' => $newQty]);
         }else{
+            // dd($data);
             SaleProductlist::create($data);
         }
         return back()->with(['createProductsuccess' => 'သင့်ဆိုင်အတွက် ရောင်းကုန်ပစည်းတစ်ခု စာရင်းသွင်းပြီးပါပြီ။ အသေးစိတ်ကြည့်ရှု့ရန် မူလစာမျက်နှာသို့သွားပေးပါ။']);

@@ -6,16 +6,19 @@ use App\Models\Shop;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
     //shop List Page
     public function shopListPage(){
-        $shopList = Shop::get();
+        $shopList = Shop::where('user_id', Auth::user()->id)->first();
         $total_cost = Products::select(DB::raw('SUM(price) as total_price'))
+                    ->where('user_id', Auth::user()->id)
                     ->groupBy('category_id')
                     ->get();
+        // dd($total_cost->toArray());
         return view('adminuser.Shop.shop', compact('shopList', 'total_cost'));
     }
 

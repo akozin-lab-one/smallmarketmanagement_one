@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('monthlies', function (Blueprint $table) {
             $table->id();
             $table->string('month');
+            $table->integer('user_id');
             $table->string('most_sale_Item');
             $table->integer('total');
             $table->timestamps();

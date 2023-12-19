@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('dailies', function (Blueprint $table) {
             $table->id();
             $table->string('date');
+            $table->integer('user_id');
             $table->string('item_list');
             $table->integer('daily_total');
             $table->timestamps();

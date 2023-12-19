@@ -21,6 +21,7 @@
                         @csrf
                         <div class="form-group col-md-8 offset-md-2">
                             <label for="">Name</label>
+                            <input type="hidden" name="userId" value="{{Auth::user()->id}}">
                             <select class="form-control @error('productId') is-invalid @enderror" name="productId" id="">
                                 <option value=""></option>
                                 @foreach ($products as $p )
