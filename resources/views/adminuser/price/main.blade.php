@@ -62,22 +62,48 @@
                     @foreach ($list as $li )
                         <tr class="table-active">
                             <td>
+
                                 @php
-                                    for ($i=0; $i < count($li) ; $i++) {
-                                        $result = $li[$i];
-                                    }
+                                $name = $li[0]->name;
+                    
                                 @endphp
-                                <a href="{{route('price#detailPage', $result->id)}}" class="text-decoration-none">
-                                    {{$result->name}}
+                
+                            @foreach ($li as $item)
+                                @if ($item->qty === 0)
+                                    @php
+                                        $name = null; // Set to null if qty is zero
+                                        break; // Exit the loop since qty is zero
+                                    @endphp
+                                @endif
+                            @endforeach
+                
+                            @if ($name)
+                                <a href="{{ route('price#detailPage', $li[0]->id) }}" class="text-decoration-none">
+                                    {{ $name }}
                                 </a>
+                            @else
+                                {{ $name }}
+                                @php
+                                    echo $li[0]->name;
+                                @endphp
+                            @endif
+                
                             </td>
                             <td>
+
                                 @php
-                                    for ($i=0; $i < count($li) ; $i++) {
-                                        $result = round($li[$i]->price/$li[$i]->qty);
+                                $result = 0; // Initialize result outside the loop
+
+                                for ($i = 0; $i < count($li); $i++) {
+                                    // Check if qty is not zero before calculating
+                                    if ($li[$i]->qty !== 0) {
+                                        $result = round($li[$i]->price / $li[$i]->qty);
                                     }
+                                }
                                 @endphp
-                                {{$result}} <span>Kyats</span>
+
+                            {{$result}} <span>Kyats</span>
+
                             </td>
                             <td>{{$li[0]->shop_name}}</td>
                             <td>

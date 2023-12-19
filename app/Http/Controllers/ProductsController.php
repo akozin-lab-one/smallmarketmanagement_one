@@ -12,6 +12,7 @@ use App\Models\SaleList;
 use Illuminate\Http\Request;
 use App\Models\SaleProductlist;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
@@ -35,7 +36,9 @@ class ProductsController extends Controller
         $monthInc = monthly::select('month', DB::raw('MAX(most_sale_item) as most'), DB::raw('MAX(total) as month_total'))
                             ->groupBy('month')
                             ->get();
-        // dd($monthInc->toArray());
+
+
+
         $originalPrice = Products::select('name', DB::raw('SUM(price) as total'))
                                     ->groupBy('name')
                                     ->get();
@@ -54,18 +57,35 @@ class ProductsController extends Controller
 
     //mainPage
     public function cargoMainPage(){
-        $shop = Shop::get();
+        $shop = Shop::where('user_id', Auth::user()->id)->get();
         $cargo = Products::select('products.*', 'categories.name as category_name', 'shops.name as shop_name')
                 ->when(request('key'), function($q){
                     $q->where('products.name', 'like', '%'.request('key').'%');
                 })
                 ->orderBy('id','desc')
+                ->where('products.user_id', Auth::user()->id)
                 ->leftjoin('categories', 'products.category_id', 'categories.id')
                 ->leftjoin('shops', 'products.shop_id', 'shops.id')
                 ->paginate(4);
+        // dd($cargo->toArray());
         $total = Products::select(DB::raw('SUM(price) as total_price'))
+                ->where('user_id', Auth::user()->id)
                 ->groupBy('category_id')
                 ->get();
+
+        $productCostsByMonth = DB::table('products')
+                            ->select(
+                                DB::raw('YEAR(created_at) as year'),
+                                DB::raw('MONTH(created_at) as month'),
+                                'name',
+                                DB::raw('SUM(price) as total_cost')
+                            )
+                            ->groupBy(DB::raw('YEAR(created_at)'), DB::raw('MONTH(created_at)'), 'name')
+                            ->orderBy(DB::raw('YEAR(created_at)'), 'asc')
+                            ->orderBy(DB::raw('MONTH(created_at)'), 'asc')
+                            ->orderBy('name', 'asc')
+                            ->get();
+
         return view('adminuser.Products.main', compact('shop', 'cargo', 'total'));
     }
 
@@ -78,12 +98,25 @@ class ProductsController extends Controller
 
     //create
     public function createData(Request $request){
+        // dd($request->toArray());
         $this->validateRequestData($request);
         $data = $this->requestData($request);
 
         // dd($data);
         Products::create($data);
-        SaleProductlist::create($data);
+        $lastAddedProduct = SaleProductlist::where('name', $data['name'])
+                        ->orderBy('created_at', 'desc') // Assuming there's a timestamp to determine the order
+                        ->first();
+
+        if ($lastAddedProduct) {
+            // Calculate the new quantity based on the last added item's quantity
+            $newQty = $lastAddedProduct->qty + $data['qty'];
+
+            // Update the existing record with the new quantity
+            $lastAddedProduct->update(['qty' => $newQty]);
+        }else{
+            SaleProductlist::create($data);
+        }
         return back()->with(['createProductsuccess' => 'သင့်ဆိုင်အတွက် ရောင်းကုန်ပစည်းတစ်ခု စာရင်းသွင်းပြီးပါပြီ။ အသေးစိတ်ကြည့်ရှု့ရန် မူလစာမျက်နှာသို့သွားပေးပါ။']);
     }
 
@@ -97,6 +130,7 @@ class ProductsController extends Controller
 
     //edit
     public function editData(Request $request){
+        // dd($request->toArray());
         $this->validateRequestData($request);
         $data = $this->requestData($request);
 
@@ -127,6 +161,7 @@ class ProductsController extends Controller
     private function requestData(Request $request){
         return[
             'name' => $request->name,
+            'user_id'=>$request->userId,
             'category_id' => $request->categoryId,
             'qty' =>$request->qty,
             'unit' => $request->unit,

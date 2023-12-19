@@ -30,6 +30,7 @@
                 </div>
                 <div class="form-group col-md-8 offset-md-2">
                     <label for="">Category</label>
+                    <input type="hidden" name="userId" value="{{Auth::user()->id}}">
                     <select class="form-control @error('categoryId') is-invalid @enderror" name="categoryId" id="">
                         @foreach ($categories as $c)
                            <option value=""></option>

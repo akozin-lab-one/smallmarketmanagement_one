@@ -12,7 +12,8 @@
                             <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Category</th>
-                            <th scope="col">Qty</th>
+                            <th scope="col">Sale Qty</th>
+                            <th scope="col">Remain Qty</th>
                             <th scope="col">Shop</th>
                             </tr>
                         </thead>
@@ -21,6 +22,7 @@
                             <tr class="table-active">
                                 <td scope="row">{{$re->product_name}}</td>
                                 <td>{{$re->category_name}}</td>
+                                <td>{{$re->sale_qty}}</td>
                                 <td>{{$re->count_qty}}</td>
                                 <td>{{$re->shop_name}}</td>
                             </tr>

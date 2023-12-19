@@ -26,6 +26,7 @@ class ShopController extends Controller
 
     //create
     public function create(Request $request){
+        // dd($request->toArray());
         $this->requestValidationData($request);
         $data = $this->requestShopData($request);
 
@@ -73,6 +74,7 @@ class ShopController extends Controller
     private function requestShopData($request){
         return[
             'name' => $request->name,
+            'user_id'=>$request->userId,
             'phone_number' => $request->phoneNumber,
             'address' => $request->address
         ];

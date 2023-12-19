@@ -9,5 +9,5 @@ class RemainItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_name', 'category_name', 'qty', 'shop_name', 'date'];
+    protected $fillable = ['product_name', 'category_name', 'qty', 'shop_name','user_id', 'date'];
 }

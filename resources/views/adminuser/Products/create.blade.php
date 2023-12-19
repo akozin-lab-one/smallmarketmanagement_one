@@ -20,6 +20,7 @@
                     @csrf
                     <div class="form-group col-md-8 offset-md-2">
                         <label for="">Name</label>
+                        <input type="hidden" name="userId" value="{{Auth::user()->id}}">
                         <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" id="">
                         @error('name')
                             <div class="invalid-feedback">

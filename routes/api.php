@@ -19,3 +19,4 @@ Route::get('price/list/', [ApiResourceController::class, 'PriceList']);
 Route::post('create/product', [ApiResourceController::class, 'CreateProduct']);
 Route::post('create/shop', [ApiResourceController::class, 'CreateShop']);
 Route::post('create/category', [ApiResourceController::class, 'CreateCategory']);
+Route::post('create/price', [ApiResourceController::class, 'CreatePrice']);

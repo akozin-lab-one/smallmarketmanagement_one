@@ -21,6 +21,7 @@ class CategoryController extends Controller
 
     //createData
     public function createCategory(Request $request){
+        // dd($request->toArray());
         $this->validateRequestData($request);
         $data = $this->requestData($request);
 
@@ -59,7 +60,8 @@ class CategoryController extends Controller
     //request
     public function requestData($request){
         return[
-            'name' => $request->name
+            'name' => $request->name,
+            'user_id'=>$request->userId
         ];
     }
 }

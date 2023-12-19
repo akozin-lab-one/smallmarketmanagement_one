@@ -7,6 +7,7 @@ use App\Models\Price;
 use App\Models\Category;
 use App\Models\Products;
 use App\Models\SaleList;
+use App\Models\SalePrice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -32,7 +33,7 @@ class ApiResourceController extends Controller
 
     //pricelist
     public function PriceList(){
-        $price = Price::get();
+        $price = SalePrice::get();
         return response()->json($price, 200);
     }
 
@@ -85,5 +86,19 @@ class ApiResourceController extends Controller
         $category = Category::get();
 
         return response()->json($category, 200);
+    }
+
+    //create price
+    public function CreatePrice(Request $request){
+        // logger($request->all());
+        $data = [
+            "product_id" => $request->productId,
+            "sale_price" => $request->salePrice
+        ];
+
+        $pricecreate = SalePrice::create($data);
+        $price = SalePrice::get();
+
+        return response()->json($price, 200);
     }
 }

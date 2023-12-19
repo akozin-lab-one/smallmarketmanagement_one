@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('category_name');
             $table->integer('qty');
             $table->string('shop_name');
+            $table->integer('user_id');
             $table->string('date');
             $table->timestamps();
         });

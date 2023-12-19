@@ -24,6 +24,7 @@
                         <div class="row">
                             <div class="form-group col-md-6 offset-md-3">
                                 <label for="">Name</label>
+                                <input type="hidden" name="userId" value="{{Auth::user()->id}}">
                                 <input type="text" name="name" id="" class="form-control  @error('name') is-invalid @enderror">
                                 @error('name')
                                     <div class="invalid-feedback">

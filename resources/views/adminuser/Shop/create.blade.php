@@ -34,6 +34,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Phone Number</label>
+                            <input type="hidden" name="userId" value="{{Auth::user()->id}}" id="">
                             <input class="form-control  @error('phoneNumber') is-invalid @enderror" type="text" name="phoneNumber" id="">
                             @error('phoneNumber')
                                 <div class="invalid-feedback">

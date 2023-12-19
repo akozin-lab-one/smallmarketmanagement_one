@@ -13,6 +13,7 @@ use App\Models\RemainItem;
 use Illuminate\Http\Request;
 use App\Models\SaleProductlist;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AjaxController extends Controller
 {
@@ -20,13 +21,51 @@ class AjaxController extends Controller
     public function listSearchPage(Request $request){
         $data = "";
 
-        $products = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_prices.sale_price')
-                ->leftjoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
-                ->where('name', 'like', '%'.$request->searchValue.'%')
+        $remain = RemainItem::select('product_name', 'category_name', DB::raw('MIN(qty) as count_qty'), 'shop_name')
+        ->groupBy('product_name', 'category_name', 'shop_name')
+        ->get();
+
+    $result = [];
+
+    if (isset($remain)) {
+        $result = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_prices.sale_price')
+            ->leftJoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
+            ->where('qty', '>', 0)
+            ->where('name', 'like', '%' . $request->searchValue . '%')
+            ->get()
+            ->groupBy('name');
+
+        logger($result);
+    } else{
+        if ($remain[0]->count_qty > 0) {
+            // If the remain item list is not empty and the minimum quantity is greater than 0,
+            // fetch the product list
+            $result = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_prices.sale_price')
+                ->leftJoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
+                ->where('qty', '>', 0)
+                ->where('name', 'like', '%' . $request->searchValue . '%')
                 ->get()
                 ->groupBy('name');
+
+            logger($result);
+
+            // You might want to do something else with $result here
+        }
+    }
+
+    // Return $result
+    logger($result);
+    return $result;
+
+
+
+        // $products = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_prices.sale_price')
+        // ->leftjoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
+        // ->where('name', 'like', '%'.$request->searchValue.'%')
+        // ->get()
+        // ->groupBy('name');
         // logger($products);
-        return $products;
+        // return $products;
     }
 
     //add Page
@@ -76,13 +115,19 @@ class AjaxController extends Controller
             ]);
             $total += $data->total_cost;
 
-            $mainQty = SaleProductlist::select('sale_productlists.name', 'sale_productlists.qty', 'sale_productlists.Date', 'categories.name as category_name', 'shops.name as shop_name')
+            $mainQty = SaleProductlist::select('sale_productlists.id','sale_productlists.name', 'sale_productlists.qty', 'sale_productlists.Date', 'categories.name as category_name', 'shops.name as shop_name')
                                     ->leftjoin('categories', 'sale_productlists.category_id', 'categories.id')
                                     ->leftjoin('shops', 'sale_productlists.shop_id', 'shops.id')
                                     ->where('sale_productlists.name', $data->name)
                                     ->first();
+            // $mainQty = SaleProductlist::select('sale_productlists.id', 'sale_productlists.name', 'sale_productlists.qty', 'sale_productlists.Date', 'categories.name as category_name', 'shops.name as shop_name')
+            //             ->leftjoin('categories', 'sale_productlists.category_id', 'categories.id')
+            //             ->leftjoin('shops', 'sale_productlists.shop_id', 'shops.id')
+            //             ->get();
 
-            logger($mainQty->shop_name);
+
+            logger($mainQty);
+            logger($data->qty);
             $remainQty = $mainQty->qty - intval($data->qty);
             logger($remainQty);
             $updateData = [
@@ -94,6 +139,7 @@ class AjaxController extends Controller
                 'category_name' => $mainQty->category_name,
                 'qty' => $remainQty,
                 'shop_name' => $mainQty->shop_name,
+                'user_id' => Auth::user()->id,
                 'date' => $mainQty->Date
             ]);
 

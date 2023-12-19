@@ -5,7 +5,11 @@
 @section('myContent')
 <form action="{{ route('register') }}" method="post" class="p-3">
     @csrf
-    <h1 class="text-center text-uppercase fw-bold">Mini POS</h1>
+    {{-- <h1 class="text-center text-uppercase fw-bold">Mini POS</h1>
+     --}}
+     <div class="text-center mb-3">
+        <img class="img-fluid rounded border-0" style="width:150px; height:auto;" src="{{ asset('img/logo.jpeg') }}" alt="App logo">
+    </div>
     <div class="col-md-8 offset-md-2">
         <label for="">Name</label>
         <input type="text" name="name" class="form-control"  id="">

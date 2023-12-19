@@ -178,6 +178,9 @@
                     data:$data,
                     success:function(response){
                         console.log(response);
+                        if (response.length === 0) {
+                            alert("you product is out of stock");
+                        }
                         $result = ``;
                         for(let x in response){
                             console.log(response[x].length);
@@ -218,9 +221,9 @@
 
             })
 
-            $('#table-data').click(function(){
+            $(document).on('click', '#get-Data', function(){
                 $userId = $('#table-data').find('#userId').val();
-                $productId = $('#table-data').find("#productId").html();
+                $productId = $('#table-data').find("#productId").text();
                 $productName = $('#table-data').find("#productName").html();
                 $productqty = $('#table-data').find('#productQty').val();
                 $productunit = $('#table-data').find('#productUnit').val();
@@ -244,7 +247,7 @@
                     url:'ajax/add',
                     data:$data,
                     success:function(result){
-                        console.log(result);
+                        // console.log(result);
                         $resultTable = ``;
                         for(let $i =0; $i<result.length; $i++){
                             console.log(result[$i]);
@@ -290,36 +293,43 @@
                         'saleTotalCost' : $(row).find('#saleTotalCost').html()
                     });
                 });
-                console.log($saleList);
+                // console.log($saleList);
 
                 $.ajax({
                     type: 'get',
-                    url:'ajax/addsalelist',
-                    data:Object.assign({}, $saleList),
-                    success:function(response){
-                        $resultTable = ``;
-                        $('#table-Add').html($resultTable);
-                        console.log(response);
+                    url: 'ajax/addsalelist',
+                    data: Object.assign({}, $saleList),
+                    success: function(response) {
+                        // console.log(response.length);
+                        if (response === []) {
+                            // Display a message when there are no remaining items
+                            // $('#table-Add').html("There is no product to sale");
+                            alert("There is no product to sale");
+                        } else {
+                            $resultTable = ``;
+                            $('#table-Add').html($resultTable);
+                            console.log(response);
 
-                        $printTable = ``;
-                        for(let $i =0; $i<response.length; $i++){
-                            console.log(response[$i]);
-                            cost = response[$i].saleQty * response[$i].salePrice;
-                            $printTable +=
-                            `
-                            <tr class="table-active">
-                                <td >${response[$i].userId}</td>
-                                <td >${response[$i].saleName}</td>
-                                <td >${response[$i].saleQty}</td>
-                                <td >${response[$i].saleUnit}</td>
-                                <td >${response[$i].salePrice}</td>
-                                <td >${cost}</td>
-                            </tr>
-                            `
+                            $printTable = ``;
+                            for (let $i = 0; $i < response.length; $i++) {
+                                cost = response[$i].saleQty * response[$i].salePrice;
+                                $printTable +=
+                                    `
+                                    <tr class="table-active">
+                                        <td >${response[$i].userId}</td>
+                                        <td >${response[$i].saleName}</td>
+                                        <td >${response[$i].saleQty}</td>
+                                        <td >${response[$i].saleUnit}</td>
+                                        <td >${response[$i].salePrice}</td>
+                                        <td >${cost}</td>
+                                    </tr>
+                                    `;
+                            }
+                            $('#table-print').html($printTable);
                         }
-                        $('#table-print').html($printTable);
                     }
-                })
+                });
+
 
                 $.ajax({
                     type: 'get',
@@ -340,7 +350,7 @@
                     'itemList' : $('#itemList').text(),
                     'dailyTotal' : $('#dailyTotal').text(),
             };
-            console.log($data);
+            // console.log($data);
 
             $.ajax({
                     type: 'get',

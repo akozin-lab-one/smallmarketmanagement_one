@@ -145,7 +145,7 @@
                                     </tr>
                                     @endif
                                 @elseif ($product->small_package  != null)
-                                @if ($smallPackageprice->category_name == 'Drink' || $smallPackageprice->category_name == 'drink' ||$smallPackageprice->category_name == 'အအေး')
+                                @if ($smallPackageprice->category_name == 'Drink' || $smallPackageprice->category_name == 'drink' ||$smallPackageprice->category_name == 'အအေး' )
                                 <tr class="table-active">
                                     <td>
                                         တစ်ဗူး

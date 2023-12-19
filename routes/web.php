@@ -21,7 +21,8 @@ Route::middleware(['adminAuth'])->group(function(){
     Route::get('/registerpage', [AuthController::class, 'registerPage'])->name('Auth#register');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware([ 'auth',
+                    'verified'])->group(function () {
     Route::get('dashboard', [Authcontroller::class, 'dashboard'])->name('dashboard');
 
     //superuser

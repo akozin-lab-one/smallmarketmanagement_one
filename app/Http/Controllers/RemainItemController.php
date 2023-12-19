@@ -12,24 +12,47 @@ class RemainItemController extends Controller
 {
     //main
     public function RemainListPage(){
-        $remain = RemainItem::select('product_name','category_name', DB::raw('MIN(qty) as count_qty'), 'shop_name')
-                        ->groupBy('product_name', 'category_name', 'shop_name')
-                        ->get();
-
-
+        // $remain = RemainItem::select('product_name','category_name', DB::raw('MIN(qty) as count_qty'), 'shop_name')
+        //                 ->groupBy('product_name', 'category_name', 'shop_name')
+        //                 ->get();
+        // $remain = RemainItem::select(
+        //     'remain_items.product_name',
+        //     'remain_items.category_name',
+        //     'remain_items.shop_name',
+        //     DB::raw('MIN(remain_items.qty) as count_qty'),
+        //     'sale_productlists.qty' // Assuming there's a column named 'qty' in the 'products' table
+        // )
+        //     ->leftJoin('sale_productlists', 'remain_items.product_name', '=', 'sale_productlists.name')
+        //     ->groupBy('remain_items.product_name', 'remain_items.category_name', 'remain_items.shop_name','remain_items.qty', 'sale_productlists.qty')
+        //     ->latest('remain_items.created_at')
+        //     ->get();
+        // $remain = RemainItem::select(
+        //         'remain_items.product_name',
+        //         'remain_items.category_name',
+        //         'remain_items.shop_name',
+        //         'remain_items.qty'
+        //         // DB::raw('MIN(remain_items.qty) as count_qty'),
+        //         // 'sale_productlists.qty' 
+        //     )
+        //     ->groupBy('remain_items.product_name', 'remain_items.category_name', 'remain_items.shop_name','remain_items.qty')
+        //     ->get();
+        $remain = RemainItem::select(
+            'remain_items.product_name',
+            'remain_items.category_name',
+            'remain_items.shop_name',
+            'remain_items.qty as count_qty',
+            'sale_productlists.qty as sale_qty'
+        )
+        ->leftJoin('sale_productlists', 'remain_items.product_name', '=', 'sale_productlists.name')
+        ->whereIn('remain_items.id', function ($query) {
+            $query->select(DB::raw('MAX(id) as id'))
+                ->from('remain_items')
+                ->groupBy('product_name');
+        })
+        ->get();
+                
+        
         // dd($remain->toArray());
-        // $data = RemainItem::select(
-        //                            'products.name as product_name',
-        //                            'shops.name as shop_name',
-        //                            'categories.name as category_name',
-        //                            'remain_items.qty as remain_qty')
-        //                     ->leftjoin('products', 'remain_items.product_id', 'products.id')
-        //                     ->leftjoin('categories', 'remain_items.category_id', 'categories.id')
-        //                     ->leftjoin('shops', 'remain_items.shop_id', 'shops.id')
-        //                     ->get()
-        //                     ->groupBy('product_name');/
-        // dd($data->toArray());
-        // dd($data->min('remain_qty'));
 
         return view('adminuser.Remain.main', compact('remain'));
     }
