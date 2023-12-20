@@ -32,6 +32,7 @@ class AjaxController extends Controller
             ->leftJoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
             ->where('qty', '>', 0)
             ->where('name', 'like', '%' . $request->searchValue . '%')
+            ->where('sale_productlists.user_id', Auth::user()->id)
             ->get()
             ->groupBy('name');
 
@@ -44,6 +45,7 @@ class AjaxController extends Controller
                 ->leftJoin('sale_prices', 'sale_productlists.id', 'sale_prices.product_id')
                 ->where('qty', '>', 0)
                 ->where('name', 'like', '%' . $request->searchValue . '%')
+                ->where('sale_productlists.user_id', Auth::user()->id)
                 ->get()
                 ->groupBy('name');
 
@@ -126,10 +128,10 @@ class AjaxController extends Controller
             //             ->get();
 
 
-            logger($mainQty);
-            logger($data->qty);
+            // logger($mainQty);
+            // logger($data->qty);
             $remainQty = $mainQty->qty - intval($data->qty);
-            logger($remainQty);
+            // logger($remainQty);
             $updateData = [
                 'qty' => $remainQty
             ];
@@ -152,10 +154,11 @@ class AjaxController extends Controller
 
     //add daily
     public function AddDailySale(Request $request){
-
+        logger($request->all());
         $date = Carbon::today()->toDateString();
         Daily::create([
             'date' => $date,
+            'user_id'=>Auth::user()->id,
             'item_list' => $request->itemList,
             'daily_total' => $request->dailyTotal
         ]);
@@ -178,6 +181,7 @@ class AjaxController extends Controller
 
         monthly::create([
             'month' => $monthName,
+            'user_id'=>Auth::user()->id,
             'most_sale_item' => $most,
             'total' => $totalCost
         ]);
@@ -191,7 +195,7 @@ class AjaxController extends Controller
 
     //getuserstatus
     public function getUserStatus(Request $request){
-        logger($request->all());
+        // logger($request->all());
         $updateData = [
             'user_action' => $request->userStatus
         ];

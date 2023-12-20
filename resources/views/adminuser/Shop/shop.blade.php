@@ -12,9 +12,7 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h2>
-                                        @if(count($total_cost))
-                                        0 Kyats
-                                    @else
+                                    @if(count($total_cost))
                                         @php
                                             $total = 0;
                                             foreach ($total_cost as $cost) {
@@ -22,6 +20,8 @@
                                             }
                                         @endphp
                                         {{$total}} Kyats
+                                    @else
+                                        0 Kyats
                                     @endif
 
                                     </h2>
@@ -40,7 +40,7 @@
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <h2>
-                                        @if ($shopList && (is_array($shopList) || $shopList instanceof Countable))
+                                    @if ($shopList && (is_array($shopList) || $shopList instanceof Countable))
                                         {{ count($shopList) }}
                                     @else
                                         0

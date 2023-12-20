@@ -9,5 +9,5 @@ class Daily extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date', 'item_list', 'daily_total'];
+    protected $fillable = ['date','user_id', 'item_list', 'daily_total'];
 }

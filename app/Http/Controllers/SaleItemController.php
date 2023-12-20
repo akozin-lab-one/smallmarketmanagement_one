@@ -8,6 +8,7 @@ use App\Models\SaleItem;
 use App\Models\SaleList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SaleItemController extends Controller
 {
@@ -18,10 +19,11 @@ class SaleItemController extends Controller
         $saleProducts = SaleItem::get();
 
         $itemList = SaleList::select('name',DB::raw('SUM(total_cost) as total'))
+                    ->where('user_id', Auth::user()->id)
                     ->whereDate('created_at', Carbon::today()->toDateString())
                     ->groupBy('name')
                     ->get();
-        // dd($itemList->toArray());
+
         return view('adminuser.Sale.saleList', compact('Products','saleProducts', 'itemList'));
     }
 }

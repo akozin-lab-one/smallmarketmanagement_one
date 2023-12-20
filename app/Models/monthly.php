@@ -9,5 +9,5 @@ class monthly extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['month', 'most_sale_item', 'total'];
+    protected $fillable = ['month','user_id', 'most_sale_item', 'total'];
 }

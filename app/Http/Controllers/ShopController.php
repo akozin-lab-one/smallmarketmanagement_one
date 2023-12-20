@@ -13,12 +13,12 @@ class ShopController extends Controller
 {
     //shop List Page
     public function shopListPage(){
-        $shopList = Shop::where('user_id', Auth::user()->id)->first();
+        $shopList = Shop::where('user_id', Auth::user()->id)->get();
         $total_cost = Products::select(DB::raw('SUM(price) as total_price'))
                     ->where('user_id', Auth::user()->id)
                     ->groupBy('category_id')
                     ->get();
-        // dd($total_cost->toArray());
+
         return view('adminuser.Shop.shop', compact('shopList', 'total_cost'));
     }
 
@@ -29,7 +29,7 @@ class ShopController extends Controller
 
     //create
     public function create(Request $request){
-        // dd($request->toArray());
+
         $this->requestValidationData($request);
         $data = $this->requestShopData($request);
 

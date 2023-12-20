@@ -39,7 +39,7 @@
                                             {{$resultDate}}
                                         </td>
                                         <td>
-                                            {{round($p->price/$p->qty)}} <span>Kyats</span>
+                                            {{round($p->price/$p->productQty)}} <span>Kyats</span>
                                         </td>
                                     </tr>
                                 @endforeach

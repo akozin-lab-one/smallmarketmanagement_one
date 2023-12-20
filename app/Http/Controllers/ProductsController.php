@@ -20,43 +20,51 @@ class ProductsController extends Controller
     //mainPage
     public function mainPage(){
         $total = Products::select(DB::raw('SUM(price) as total_price'))
+                ->where('user_id', Auth::user()->id)
                 ->groupBy('category_id')
                 ->get();
         // dd($total->toArray());
         $dailyInc = SaleList::select('created_at',DB::raw('SUM(total_cost) as total'))
                     ->whereDate('created_at', Carbon::today()->toDateString())
+                    ->where('user_id', Auth::user()->id)
                     ->groupBy('created_at')
                     ->get();
         // dd($dailyInc->toArray());
         $monthlyInc = SaleList::select('name', DB::raw('count(name) as count_name'), DB::raw('SUM(total_cost) as total'))
                         ->whereMonth('created_at', Carbon::now()->month)
+                        ->where('user_id', Auth::user()->id)
                         ->groupBy('name')
                         ->get();
-
+        // dd($monthlyInc->toArray());
         $monthInc = monthly::select('month', DB::raw('MAX(most_sale_item) as most'), DB::raw('MAX(total) as month_total'))
+                            ->where('user_id', Auth::user()->id)
                             ->groupBy('month')
                             ->get();
 
 
 
         $originalPrice = Products::select('name', DB::raw('SUM(price) as total'))
+                                    ->where('user_id', Auth::user()->id)
                                     ->groupBy('name')
                                     ->get();
 
         $salePrice = SaleList::select('name', DB::raw('SUM(total_cost) as total'))
+                                    ->where('user_id', Auth::user()->id)
                                     ->groupBy('name')
                                     ->get();
 
         $daily = Daily::select('date',DB::raw('MAX(daily_total) as total'), DB::raw('MAX(item_list) as item'))
+                            ->where('user_id', Auth::user()->id)
                             ->groupBy('date')
                             ->get();
-
+        // dd($daily->toArray());
         return view('adminuser.usermain', compact('total', 'dailyInc', 'monthlyInc', 'originalPrice', 'salePrice', 'daily', 'monthInc'));
     }
 
 
     //mainPage
     public function cargoMainPage(){
+        // dd(Auth::user()->id);
         $shop = Shop::where('user_id', Auth::user()->id)->get();
         $cargo = Products::select('products.*', 'categories.name as category_name', 'shops.name as shop_name')
                 ->when(request('key'), function($q){
@@ -67,7 +75,11 @@ class ProductsController extends Controller
                 ->leftjoin('categories', 'products.category_id', 'categories.id')
                 ->leftjoin('shops', 'products.shop_id', 'shops.id')
                 ->paginate(4);
-        // dd($cargo->toArray());
+                $cargoCounts = Products::groupBy('name')
+                ->where('user_id', Auth::user()->id)
+                ->select('name', \DB::raw('count(*) as count'))
+                ->get();
+        // dd($cargoCounts->toArray());
         $total = Products::select(DB::raw('SUM(price) as total_price'))
                 ->where('user_id', Auth::user()->id)
                 ->groupBy('category_id')
@@ -86,13 +98,13 @@ class ProductsController extends Controller
                             ->orderBy('name', 'asc')
                             ->get();
 
-        return view('adminuser.Products.main', compact('shop', 'cargo', 'total'));
+        return view('adminuser.Products.main', compact('shop','cargoCounts', 'cargo', 'total'));
     }
 
     //createPage
     public function createMainPage(){
-        $shops = Shop::get();
-        $categories = Category::get();
+        $shops = Shop::where('user_id', Auth::user()->id)->get();
+        $categories = Category::where('user_id', Auth::user()->id)->get();
         return view('adminuser.Products.create', compact('categories', 'shops'));
     }
 

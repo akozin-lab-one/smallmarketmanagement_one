@@ -11,8 +11,21 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h2 class="fw-bold">DingWang</h2>
-                                    <h4 class="">Most Sale Items</h4>
+                                    <h2 class="fw-bold">
+                                        @if (count($mostSaleList) !== 0)
+                                        @php
+                                            $maxCount = $mostSaleList->max('count');
+                                            $itemWithMaxCount = $mostSaleList->where('count', $maxCount)->first();
+                                        @endphp
+                                        @if ($itemWithMaxCount)
+                                             {{ $itemWithMaxCount->name }}
+                                        @endif
+
+                                        @else
+                                            no product
+                                        @endif
+                                    </h2>
+                                    <h4 class="">Most Sale Item</h4>
                                 </div>
                                 <div class="align-self-center">
                                     <i class="fa-regular fa-star fs-1"></i>
@@ -26,8 +39,16 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h2 class="fw-bold">Points</h2>
-                                    <h4 class="">Shop</h4>
+                                    <h2 class="fw-bold">
+                                    @if ($shopName !== null)
+                                        {{$shopName->name}}
+                                    @else
+                                        no Name
+                                    @endif
+                                    </h2>
+                                    <h4 class="">
+                                        Shop
+                                    </h4>
                                 </div>
                                 <div class="align-self-center">
                                     <i class="fa-regular fa-handshake fs-1"></i>
@@ -46,7 +67,7 @@
     </div>
     <div class="container">
         <div class="col-md-10 offset-md-1 mt-2">
-            @if (count($list) != 0)
+            @if (count($listmain) !== 0)
             <h3 class="fw-bold">Initial Price</h3>
             <table class="table table-hover">
                 <thead>
@@ -58,68 +79,36 @@
                 </tr>
                 </thead>
                 <tbody>
-
-                    @foreach ($list as $li )
+                    @foreach ($listmain as $li )
                         <tr class="table-active">
                             <td>
-
-                                @php
-                                $name = $li[0]->name;
-                    
-                                @endphp
-                
-                            @foreach ($li as $item)
-                                @if ($item->qty === 0)
-                                    @php
-                                        $name = null; // Set to null if qty is zero
-                                        break; // Exit the loop since qty is zero
-                                    @endphp
+                                @if ($li['qty'] !== 0)
+                                    <a href={{route('price#detailPage', $li['id'])}}>{{$li['name']}}</a>
+                                @else
+                                    {{$li['name']}}
                                 @endif
-                            @endforeach
-                
-                            @if ($name)
-                                <a href="{{ route('price#detailPage', $li[0]->id) }}" class="text-decoration-none">
-                                    {{ $name }}
-                                </a>
-                            @else
-                                {{ $name }}
+
+                            </td>
+                            <td>
                                 @php
-                                    echo $li[0]->name;
+                                    $result = $li['qty'] !== 0 ? $li['price']/$li['productQty'] : 0;
                                 @endphp
-                            @endif
-                
+
+                                {{ $result }} <span>Kyats</span>
+
+                            </td>
+                            <td>
+                                {{$li['shop_name']}}
                             </td>
                             <td>
 
-                                @php
-                                $result = 0; // Initialize result outside the loop
+                            {{ $li['date'] }}
 
-                                for ($i = 0; $i < count($li); $i++) {
-                                    // Check if qty is not zero before calculating
-                                    if ($li[$i]->qty !== 0) {
-                                        $result = round($li[$i]->price / $li[$i]->qty);
-                                    }
-                                }
-                                @endphp
-
-                            {{$result}} <span>Kyats</span>
-
-                            </td>
-                            <td>{{$li[0]->shop_name}}</td>
-                            <td>
-                                @php
-                                    for ($i=0; $i < count($li); $i++) {
-                                        $result = date('d-m-y', strtotime($li[$i]->date));
-                                    }
-                                @endphp
-                                {{$result}}
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            @else
-                <h3 class="fw-bold text-center mt-5">There is no Data for Shop List!!!</h3>
             @endif
         </div>
     </div>

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
     //mainPage
     public function mainPage(){
-        $category = Category::orderBy('id', 'desc')->get();
+        $category = Category::select('id', 'name', 'user_id', 'created_at')->where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
         return view('adminuser.Category.list', compact('category'));
     }
 

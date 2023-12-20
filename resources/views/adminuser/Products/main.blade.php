@@ -11,7 +11,7 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h3 class="fw-bold ms-3">{{count($cargo)}}</h3>
+                                    <h3 class="fw-bold ms-3">{{count($cargoCounts)}}</h3>
                                     <h4>Cargo List</h4>
                                 </div>
                                 <div class="align-self-center">
