@@ -29,7 +29,9 @@ class User extends Authenticatable
         'email',
         'phone',
         'image',
+        'duration',
         'address',
+        'update_time',
         'password',
         'confirm_password'
     ];

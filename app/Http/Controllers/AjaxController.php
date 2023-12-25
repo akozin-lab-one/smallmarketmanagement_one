@@ -195,12 +195,28 @@ class AjaxController extends Controller
 
     //getuserstatus
     public function getUserStatus(Request $request){
-        // logger($request->all());
-        $updateData = [
-            'user_action' => $request->userStatus
-        ];
-        $userStatus = User::where( 'id', $request->userId)->update($updateData);
+        logger($request->all());
 
-        logger($userStatus);
+        $updateData = [
+            'user_action' => $request->userStatus,
+            'duration' => ($request->userStatus == 1) ? 0 : 30
+        ];
+
+        logger($updateData);
+        User::where('id', $request->userId)->update($updateData);
+
+    }
+
+    //getUserDuration
+    public function getUserDuration(Request $request){
+        logger($request->all());
+
+        $updateData = [
+            'duration' => $request->userDuration,
+            'user_action' => 0
+        ];
+
+        logger($updateData);
+        User::where('id', $request->userId)->update($updateData);
     }
 }

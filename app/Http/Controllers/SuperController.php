@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,45 @@ class SuperController extends Controller
         // dd($userStatus->toArray());
         $personList = User::where('role', 'admin')->get();
         // dd($personList->toArray());
-        return view('superuser.team', compact('personList'));
+        $updateTime = null;
+        foreach($personList as $person){
+        // dd($person->user_action);
+        $duration = $person->duration;
+        // dd($duration);
+        $createdDate = $person->created_at;
+        $after50Days = $createdDate->modify('+'. $duration .'days');
+        // dd($after50Days);
+        // dd(User::where('role', 'admin')->get()->toArray());
+        $dayAfter = $after50Days->format('d-m-y');
+        // dd($dayAfter);
+        $daysDifference = now()->diffInDays($createdDate) + 1 === $person->duration ? now()->diffInDays($createdDate) + 1 : now()->diffInDays($createdDate) + ($person->duration - now()->diffInDays($createdDate));
+        // dd($daysDifference ,$person->duration);
+        // dd($person->user_action);
+        if ($person->user_action === 0) {
+            $daysDifference === $person->duration ? User::where('role', 'admin')->where('id', $person->id)->update(['user_action' => 0]) : User::where('role', 'admin')->where('id', $person->id)->update(['user_action' => 1]);
+        }else{
+            User::where('role', 'admin')->where('id', $person->id)->update(['duration' => 0]);
+        }
+
+
+        // dd( $person->created_at->format('d-m-y') !== $person->updated_at->format('d-m-y'));
+        // if ($person->user_action === 1) {
+        //     // dd(true);
+        //     User::where('role', 'admin')->where('id', $person->id)->update(['duration' => 0]);
+        // }elseif ($person->user_action === 0) {
+        //     User::where('role', 'admin')->where('id', $person->id)->update(['duration' => 30]);
+        // }
+
+        // if ($person->duration > 0) {
+        //     // dd(true);
+        //     User::where('role', 'admin')->update(['user_action' => 0]);
+        // }elseif ($person->duration === 0) {
+        //     User::where('role', 'admin')->update(['user_action' => 1]);
+        // }
+
+        }
+
+        return view('superuser.team', compact('personList','dayAfter','daysDifference','updateTime'));
     }
 }
+

@@ -82,7 +82,10 @@
                                         {{round($BigPrice)}} <span>Kyats</span>
                                     </td>
                                     <td>
+                                        @if ($salePrice !== null)
                                         {{$salePrice->sale_price}} <span>Kyats</span>
+                                        @endif
+                                        0 Kyats
                                     </td>
                                 </tr>
                                 @if ($smallPackageprice->category_name == 'coffee' || $smallPackageprice->category_name == 'ကော်ဖီ' || $smallPackageprice->category_name == 'tea' || $smallPackageprice->category_name == 'လက်ဖက်ရည်')

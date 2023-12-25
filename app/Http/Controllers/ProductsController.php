@@ -61,6 +61,10 @@ class ProductsController extends Controller
         return view('adminuser.usermain', compact('total', 'dailyInc', 'monthlyInc', 'originalPrice', 'salePrice', 'daily', 'monthInc'));
     }
 
+    public function mainAboutPage(){
+        return view('adminuser.about');
+    }
+
 
     //mainPage
     public function cargoMainPage(){

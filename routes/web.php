@@ -43,14 +43,19 @@ Route::middleware([ 'auth',
             Route::group(['prefix'=>'ajax'], function(){
                 //getuesrStatus
                 Route::get('/userStatus', [AjaxController::class, 'getUserStatus'])->name('user#Status');
+
+                //getuserDuration
+                Route::get('/userDuration', [AjaxController::class, 'getUserDuration'])->name('ajax#userduration');
             });
         });
     });
 
     //adminuser
-    Route::group(['middleware'=>'adminAuth'],function(){
+    Route::group(['middleware'=>'adminAuth', 'middleware' => 'expired_checked'],function(){
         Route::prefix('adminuser')->group(function(){
                 Route::get('/main', [ProductsController::class, 'mainPage'])->name('adminuser#main');
+
+                Route::get('/mainabout', [ProductsController::class, 'mainAboutPage'])->name('adminuser#about');
 
                 Route::prefix('shop')->group(function(){
                     Route::get('/', [ShopController::class, 'shopListPage'])->name('adminuser#shoplist');
@@ -185,7 +190,7 @@ Route::middleware([ 'auth',
                     //add daily
                     Route::get('/addDaily', [AjaxController::class, 'AddDaily'])->name('ajax#dailyadd');
 
-                    //usercontrol
+                    // usercontrol
                     // Route::get('/userStatus', [AjaxController::class, 'getUserStatus'])->name('ajax#userstatus');
 
                     // //add tabel

@@ -42,7 +42,7 @@ class PriceController extends Controller
                     ->whereIn('shops.id', $mostSaleList->pluck('sale_shop_id')->unique())
                     ->where('shops.user_id', Auth::user()->id)
                     ->first();
-
+        // dd($shopName);
         return view('adminuser.price.main', compact('listmain','mostSaleList','shopName'));
     }
 
@@ -70,7 +70,7 @@ class PriceController extends Controller
                             ->where('product_id', $id)
                             ->latest('created_at')
                             ->first();
-        // dd($salePrice->toArray());
+        // dd($salePrice);
         $BigPrice = $product->price/$smallPackageprice->productQty;
 
         $smallprice = $product->small_package  == null ? " " : $BigPrice/$product->small_package;
@@ -92,7 +92,10 @@ class PriceController extends Controller
 
     //createPage
     public function createPage(){
-        $products = SaleProductlist::select('id','name')->get()->groupBy('name');
+        $products = SaleProductlist::select('id','name')
+                        ->where('user_id', Auth::user()->id)
+                        ->get()
+                        ->groupBy('name');
         return view('adminuser.price.createPage', compact('products'));
     }
 

@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\adminAuthMiddleware;
 use App\Http\Middleware\superAuthMiddleware;
+use App\Http\Middleware\CheckAccountExpiration;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adminAuth' => adminAuthMiddleware::class,
-        'superAuth' => superAuthMiddleware::class
+        'superAuth' => superAuthMiddleware::class,
+        'expired_checked' => CheckAccountExpiration::class,
     ];
 }

@@ -39,6 +39,20 @@
     @enderror
 
     <div class="col-md-8 offset-md-2">
+        <label for="">Duration</label>
+        <select name="duration" id="" class="form-control">
+            <option value="">choose your duration</option>
+            <option value="30">one month</option>
+            <option value="90">three minths</option>
+            <option value="180">six months</option>
+            <option value="365">one year</option>
+        </select>
+    </div>
+    @error('gender')
+        <small class="text-danger col-md-6 offset-md-2">{{$message}}</small>
+    @enderror
+
+    <div class="col-md-8 offset-md-2">
         <label for="">Phone</label>
         <input type="text" name="phone" class="form-control" id="">
     </div>

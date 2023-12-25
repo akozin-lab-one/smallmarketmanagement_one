@@ -109,6 +109,9 @@
                                     <a class="dropdown-item"
                                         href="{{ route('setting#account', Auth::user()->id) }}">Settings</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{route('adminuser#about')}}">About</a>
+                                </li>
                                 <li class="m-3">
                                     <form action="{{ route('logout') }}" method="post">
                                         @csrf
